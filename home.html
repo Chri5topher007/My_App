@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventBee - Home</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="home.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-calendar-check"></i></div>
+                <span>EventBee</span>
+            </a>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="navSearch" placeholder="Search events...">
+            </div>
+            <div class="nav-links">
+                <a href="create.html" class="btn-create"><i class="fas fa-plus"></i> <span>Create Event</span></a>
+                <button id="logoutBtn" class="btn-create"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></button>
+                <div class="user-profile">
+                    <img id="userPhoto" src="https://i.pravatar.cc/40?img=12" alt="User">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1>Discover <span>Events</span> Near You</h1>
+            <p>Explore the best events happening in your city</p>
+            <div class="search-main">
+                <div class="input-group search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="heroSearch" placeholder="Search events...">
+                </div>
+                <div class="input-group location-input">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="heroLocation" placeholder="Location">
+                </div>
+                <button class="btn-search-hero" id="heroSearchBtn">Search</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Categories -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="category-grid" id="categoryGrid">
+                <div class="cat-item active" data-cat="All"><div class="cat-circle"><i class="fas fa-globe"></i></div><span>All</span></div>
+                <div class="cat-item" data-cat="Music"><div class="cat-circle"><i class="fas fa-music"></i></div><span>Music</span></div>
+                <div class="cat-item" data-cat="Business"><div class="cat-circle"><i class="fas fa-briefcase"></i></div><span>Business</span></div>
+                <div class="cat-item" data-cat="Food"><div class="cat-circle"><i class="fas fa-utensils"></i></div><span>Food</span></div>
+                <div class="cat-item" data-cat="Sports"><div class="cat-circle"><i class="fas fa-futbol"></i></div><span>Sports</span></div>
+                <div class="cat-item" data-cat="Arts"><div class="cat-circle"><i class="fas fa-palette"></i></div><span>Arts</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Grid -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-top">
+                <h2>Upcoming Events</h2>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="All">All</button>
+                    <button class="filter-btn" data-filter="Today">Today</button>
+                    <button class="filter-btn" data-filter="Tomorrow">Tomorrow</button>
+                </div>
+            </div>
+            <div class="events-grid" id="eventsGrid">
+                <!-- Events loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 EventBee. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

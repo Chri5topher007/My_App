@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event - EventBee</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="home.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-calendar-check"></i></div>
+                <span>EventBee</span>
+            </a>
+            <div class="nav-links">
+                <a href="home.html" class="btn-create"><i class="fas fa-arrow-left"></i> Back</a>
+                <button id="logoutBtnCreate" class="btn-create">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="create-section">
+        <div class="container">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <h1>Create Your Event</h1>
+                    <p>Fill details to publish</p>
+                </div>
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label>Event Title</label>
+                        <input type="text" id="eventTitle" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="eventDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" id="eventTime" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="eventLocation" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="eventCategory">
+                                <option>Business</option>
+                                <option>Music</option>
+                                <option>Food</option>
+                                <option>Sports</option>
+                                <option>Arts</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Price ($)</label>
+                            <input type="number" id="eventPrice" placeholder="0 for Free">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL (Optional)</label>
+                        <input type="text" id="eventImage" placeholder="https://...">
+                    </div>
+                    <button type="submit" class="btn-submit">Publish Event</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Specific Logic for Create Page
+        const eventForm = document.getElementById('eventForm');
+        
+        eventForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+            const time = document.getElementById('eventTime').value;
+            const location = document.getElementById('eventLocation').value;
+            const category = document.getElementById('eventCategory').value;
+            const price = document.getElementById('eventPrice').value;
+            const image = document.getElementById('eventImage').value || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80";
+
+            try {
+                await db.collection('events').add({
+                    title, 
+                    date: new Date(date), 
+                    time, 
+                    location, 
+                    category, 
+                    price: price || "0",
+                    image,
+                    isFree: price > 0 ? false : true,
+                    authorId: auth.currentUser.uid,
+                    authorName: auth.currentUser.displayName
+                });
+                alert("Event Created!");
+                window.location.href = 'home.html';
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
+        });
+
+        document.getElementById('logoutBtnCreate').addEventListener('click', () => {
+            auth.signOut();
+        });
+    </script>
+</body>
+</html>

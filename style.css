@@ -1,0 +1,169 @@
+/* ==========================================
+   1. GLOBAL STYLES & VARIABLES
+   ========================================== */
+   :root {
+    --primary: #4a4ef7;
+    --primary-dark: #3d41d6;
+    --bg-color: #f7f7f7;
+    --card-bg: #ffffff;
+    --text-main: #222222;
+    --text-light: #888888;
+    --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    --radius: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* Utility Class for Hiding Elements */
+.hidden { display: none !important; }
+
+/* ==========================================
+   2. LOGIN PAGE STYLES (index.html)
+   ========================================== */
+.auth-body { margin: 0; min-height: 100vh; display: flex; background: #f0f2f5; }
+.auth-container { display: flex; width: 100%; min-height: 100vh; }
+
+.auth-brand {
+    flex: 1;
+    background: linear-gradient(135deg, var(--primary) 0%, #6c5ce7 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: white;
+}
+.auth-brand .logo span { color: white; font-size: 2rem; font-weight: 700; }
+.auth-brand .logo-icon { background: rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+.brand-content { max-width: 400px; }
+.brand-content h2 { font-size: 2.5rem; margin: 20px 0; font-weight: 700; }
+.brand-content p { font-size: 1.1rem; opacity: 0.9; }
+
+.auth-forms {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    padding: 40px;
+}
+.form-box { width: 100%; max-width: 400px; }
+.form-header h1 { font-size: 2rem; margin-bottom: 10px; }
+.form-header p { color: var(--text-light); margin-bottom: 30px; }
+
+.social-login { margin-bottom: 20px; }
+.google-btn {
+    width: 100%; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: 0.3s;
+}
+.google-btn:hover { background: #f9f9f9; }
+.google-btn img { width: 20px; height: 20px; }
+
+.divider { text-align: center; position: relative; margin: 20px 0; color: #aaa; }
+.divider::before, .divider::after { content: ""; position: absolute; top: 50%; width: 40%; height: 1px; background: #eee; }
+.divider::before { left: 0; } .divider::after { right: 0; }
+
+.input-group-auth {
+    display: flex; align-items: center; background: #f5f5f5; border-radius: 8px;
+    margin-bottom: 15px; padding: 0 15px; border: 2px solid transparent; transition: 0.3s; height: 50px;
+}
+.input-group-auth:focus-within { border-color: var(--primary); background: white; }
+.input-group-auth input { width: 100%; border: none; background: transparent; font-family: inherit; outline: none; font-size: 1rem; }
+.input-group-auth i { color: #888; margin-right: 15px; width: 20px; text-align: center; }
+
+.btn-submit-auth {
+    width: 100%; padding: 14px; background: var(--primary); color: white; border: none;
+    border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+}
+.btn-submit-auth:hover { background: var(--primary-dark); }
+
+.switch-auth { text-align: center; margin-top: 25px; color: #666; }
+.switch-auth a { color: var(--primary); font-weight: 600; text-decoration: none; cursor: pointer; }
+
+/* ==========================================
+   3. MAIN APP STYLES (home.html & create.html)
+   ========================================== */
+
+/* Navbar */
+.navbar { background: var(--card-bg); height: 75px; display: flex; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 0 rgba(0,0,0,0.05); padding: 0 40px; }
+.nav-container { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; }
+.logo span { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
+.search-bar { display: flex; align-items: center; background: var(--bg-color); padding: 12px 25px; border-radius: 40px; width: 30%; }
+.search-bar input { border: none; background: transparent; width: 100%; margin-left: 10px; font-family: inherit; outline: none; }
+.nav-links { display: flex; align-items: center; gap: 15px; }
+.btn-create { background: var(--bg-color); color: var(--text-main); padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: 0.3s; border: none; cursor: pointer; font-family: inherit; font-size: 0.95rem; }
+.btn-create:hover { background: var(--primary); color: white; }
+.user-profile img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; object-fit: cover; }
+
+/* Hero Section */
+.hero-section { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); padding: 100px 20px 120px; text-align: center; }
+.hero-section h1 { font-size: 3.5rem; color: #1a1a1a; margin-bottom: 15px; font-weight: 800; }
+.hero-section h1 span { color: var(--primary); }
+.hero-section p { color: #666; font-size: 1.1rem; margin-bottom: 40px; }
+.search-main { background: var(--card-bg); padding: 8px; border-radius: 70px; display: flex; align-items: center; box-shadow: var(--shadow); max-width: 900px; margin: 0 auto; }
+.input-group { display: flex; align-items: center; padding: 10px 20px; flex: 1; color: #888; }
+.input-group i { margin-right: 12px; color: var(--primary); }
+.input-group input { border: none; width: 100%; font-family: inherit; font-size: 1rem; background: transparent; outline: none; }
+.search-input { flex: 1.5; border-right: 1px solid #eee; }
+.location-input { flex: 1; border-right: 1px solid #eee; }
+.btn-search-hero { background: var(--primary); color: white; border: none; padding: 18px 40px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+
+/* Categories */
+.categories-section { margin-top: -50px; position: relative; z-index: 10; padding-bottom: 40px; }
+.category-grid { display: flex; gap: 15px; overflow-x: auto; padding: 20px 0; scrollbar-width: none; justify-content: center; }
+.cat-item { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; min-width: 80px; }
+.cat-circle { width: 60px; height: 60px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #555; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: 0.3s; }
+.cat-item:hover .cat-circle, .cat-item.active .cat-circle { background: var(--primary); color: white; transform: translateY(-5px); }
+
+/* Events Grid */
+.main-content { padding: 40px 0; }
+.section-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.filters { display: flex; gap: 10px; }
+.filter-btn { background: white; border: 1px solid #eee; padding: 8px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-family: inherit; }
+.filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+.events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+
+/* Event Card */
+.event-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: 0.3s; }
+.event-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+.card-image { height: 200px; position: relative; overflow: hidden; background: #eee; }
+.card-image img { width: 100%; height: 100%; object-fit: cover; }
+.love-btn { position: absolute; top: 15px; right: 15px; width: 35px; height: 35px; border-radius: 50%; background: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.card-content { padding: 20px; display: flex; gap: 15px; }
+.event-date-box { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 12px; padding: 10px; width: 60px; height: 70px; border: 1px solid #eee; text-align: center; }
+.event-date-box .month { font-size: 0.7rem; color: #999; font-weight: 600; }
+.event-date-box .day { font-size: 1.5rem; font-weight: 700; color: var(--text-main); line-height: 1.1; }
+.event-info { flex: 1; }
+.event-info h3 { font-size: 1rem; margin-bottom: 8px; }
+.event-meta { font-size: 0.85rem; color: #666; display: flex; align-items: center; gap: 5px; }
+.load-more { text-align: center; margin-top: 40px; }
+.btn-load-more { background: transparent; border: 2px solid var(--primary); color: var(--primary); padding: 12px 30px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.btn-load-more:hover { background: var(--primary); color: white; }
+
+/* Footer */
+.footer { background: #222; color: #aaa; padding: 30px; text-align: center; margin-top: 50px; }
+
+/* Create Form */
+.create-section { padding: 60px 20px; background: #f0f2f5; min-height: 80vh; }
+.form-wrapper { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: var(--shadow); }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 1rem; }
+.form-row { display: flex; gap: 20px; }
+.form-row .form-group { flex: 1; }
+.btn-submit { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
+.btn-submit:hover { background: var(--primary-dark); }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .search-bar, .nav-links .btn-create span { display: none; }
+    .hero-section h1 { font-size: 2rem; }
+    .search-main { flex-direction: column; border-radius: 20px; padding: 15px; }
+    .input-group { width: 100%; border-right: none !important; border-bottom: 1px solid #eee; padding: 15px; }
+    .auth-brand { display: none; }
+    .form-row { flex-direction: column; }
+}
