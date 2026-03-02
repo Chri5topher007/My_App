@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventBee — Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="home.html" class="nav-logo">
+        <div class="nav-logo-icon"><i class="fas fa-calendar-check"></i></div>
+        Event<em>Bee</em>
+      </a>
+      <div class="nav-actions">
+        <a href="home.html" class="btn-nav btn-ghost"><i class="fas fa-home"></i> <span>Home</span></a>
+        <span class="btn-nav btn-admin" style="cursor:default;"><i class="fas fa-shield-alt"></i> <span>Admin</span></span>
+        <button id="logoutBtn" class="btn-nav btn-ghost"><i class="fas fa-sign-out-alt"></i></button>
+        <img id="userAvatar" src="https://i.pravatar.cc/40?img=12" alt="" class="nav-avatar">
+      </div>
+    </div>
+  </nav>
+
+  <main class="admin-page">
+    <div class="container">
+      <div class="admin-head">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p>Manage event approvals and user roles</p>
+        </div>
+        <div class="admin-badge"><i class="fas fa-crown"></i> Administrator</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-icon si-o"><i class="fas fa-hourglass-half"></i></div><div><div class="stat-num" id="sPending">—</div><div class="stat-lbl">Pending</div></div></div>
+        <div class="stat-card"><div class="stat-icon si-g"><i class="fas fa-check-circle"></i></div><div><div class="stat-num" id="sApproved">—</div><div class="stat-lbl">Approved</div></div></div>
+        <div class="stat-card"><div class="stat-icon si-p"><i class="fas fa-users"></i></div><div><div class="stat-num" id="sUsers">—</div><div class="stat-lbl">Users</div></div></div>
+        <div class="stat-card"><div class="stat-icon si-r"><i class="fas fa-calendar-alt"></i></div><div><div class="stat-num" id="sTotal">—</div><div class="stat-lbl">Total Events</div></div></div>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="pending"><i class="fas fa-hourglass-half"></i> <span>Pending</span><span class="tab-badge hidden" id="pendingBadge">0</span></button>
+        <button class="admin-tab" data-tab="approved"><i class="fas fa-check-double"></i> <span>Approved</span></button>
+        <button class="admin-tab" data-tab="users"><i class="fas fa-users"></i> <span>Users</span></button>
+      </div>
+
+      <div class="tab-panel active" id="tab-pending">
+        <div class="pending-list" id="pendingList"><div class="admin-empty"><span class="spinner" style="width:32px;height:32px;border-width:3px;"></span></div></div>
+      </div>
+      <div class="tab-panel" id="tab-approved">
+        <div class="pending-list" id="approvedList"><div class="admin-empty"><span class="spinner" style="width:32px;height:32px;border-width:3px;"></span></div></div>
+      </div>
+      <div class="tab-panel" id="tab-users">
+        <div class="user-list" id="userList"><div class="admin-empty"><span class="spinner" style="width:32px;height:32px;border-width:3px;"></span></div></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer"><p>&copy; 2024 EventBee</p></footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+  let adminUid = null;
+  const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  const DAYS   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const toDate = v => v && v.toDate ? v.toDate() : new Date(v || Date.now());
+  const esc    = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  auth.onAuthStateChanged(user => {
+    if (!user) { window.location.href = 'index.html'; return; }
+    db.collection('users').doc(user.uid).get().then(doc => {
+      if (!doc.exists || !doc.data().isAdmin) { alert('Admin access only.'); window.location.href = 'home.html'; return; }
+      adminUid = user.uid;
+      if (user.photoURL) document.getElementById('userAvatar').src = user.photoURL;
+      document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut().then(() => window.location.href = 'index.html'));
+      initAdmin();
+    }).catch(() => window.location.href = 'home.html');
+  });
+
+  function initAdmin() {
+    // Tabs
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+    loadStats(); loadPending(); loadApproved(); loadUsers();
+  }
+
+  function loadStats() {
+    db.collection('events').where('approved','==',false).onSnapshot(s => {
+      document.getElementById('sPending').textContent = s.size;
+      const b = document.getElementById('pendingBadge');
+      b.textContent = s.size; b.classList.toggle('hidden', s.size === 0);
+    });
+    db.collection('events').where('approved','==',true).onSnapshot(s => document.getElementById('sApproved').textContent = s.size);
+    db.collection('users').onSnapshot(s => document.getElementById('sUsers').textContent = s.size);
+    db.collection('events').onSnapshot(s => document.getElementById('sTotal').textContent = s.size);
+  }
+
+  function buildEventCard(id, ev, isPending) {
+    const div = document.createElement('div');
+    div.className = 'pending-card' + (isPending ? '' : ' approved-border');
+    const d = toDate(ev.date);
+    const dateStr = DAYS[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    const timeStr = d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+    const img = ev.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=300&q=80';
+    const loc = ev.location || '';
+    div.innerHTML = `
+      <img class="pending-img" src="${esc(img)}" alt=""
+           onerror="this.src='https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=300&q=80'">
+      <div class="pending-info">
+        <div class="pending-title">${esc(ev.title||'Untitled')}</div>
+        <div class="pending-meta"><i class="fas fa-calendar"></i>${dateStr} &nbsp;·&nbsp; ${timeStr}</div>
+        <div class="pending-meta"><i class="fas fa-map-marker-alt"></i>${esc(loc||'No location')}</div>
+        <div class="pending-meta"><i class="fas fa-tag"></i>${esc(ev.category||'—')}</div>
+        <div class="pending-meta"><i class="fas fa-user"></i>${esc(ev.createdBy||'Unknown')}</div>
+        <div class="pending-meta"><i class="fas fa-dollar-sign"></i>${ev.isFree ? '<span style="color:var(--green);font-weight:700;">Free</span>' : '$' + esc(ev.price||'0')}</div>
+        ${ev.description ? `<div class="pending-meta" style="margin-top:6px;font-style:italic;color:var(--text3);">"${esc(ev.description.slice(0,100))}${ev.description.length>100?'…':''}"</div>` : ''}
+        ${loc ? `<div class="pending-meta" style="margin-top:8px;">
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}" target="_blank"
+             style="color:var(--primary);font-size:.75rem;font-weight:600;">
+            <i class="fas fa-map"></i> View on Google Maps
+          </a>
+        </div>` : ''}
+      </div>
+      <div class="pending-actions">
+        ${isPending
+          ? `<button class="btn-approve" onclick="approveEv('${id}')"><i class="fas fa-check"></i> Approve</button>
+             <button class="btn-reject"  onclick="rejectEv('${id}')"><i class="fas fa-times"></i> Reject</button>`
+          : `<button class="btn-revoke"  onclick="unapproveEv('${id}')"><i class="fas fa-undo"></i> Revoke</button>
+             <button class="btn-reject"  onclick="deleteEv('${id}')"><i class="fas fa-trash"></i> Delete</button>`
+        }
+      </div>`;
+    return div;
+  }
+
+  function loadPending() {
+    db.collection('events').where('approved','==',false).orderBy('createdAt','desc')
+      .onSnapshot(snap => {
+        const list = document.getElementById('pendingList');
+        if (snap.empty) {
+          list.innerHTML = '<div class="admin-empty"><i class="fas fa-check-circle" style="opacity:1;color:var(--green);font-size:2.5rem;"></i><p style="margin-top:14px;">All clear! No events pending.</p></div>';
+          return;
+        }
+        list.innerHTML = '';
+        snap.forEach(doc => list.appendChild(buildEventCard(doc.id, doc.data(), true)));
+      }, err => {
+        document.getElementById('pendingList').innerHTML = `
+          <div class="admin-empty">
+            <i class="fas fa-exclamation-triangle" style="opacity:1;color:var(--accent);font-size:2rem;"></i>
+            <p style="margin-top:14px;"><strong>Firestore Error:</strong> ${err.message}</p>
+            <p style="font-size:.8rem;margin-top:8px;color:var(--text3);">Check your Firestore security rules — paste the firestore.rules content into Firebase Console.</p>
+          </div>`;
+      });
+  }
+
+  function loadApproved() {
+    db.collection('events').where('approved','==',true).orderBy('date','desc')
+      .onSnapshot(snap => {
+        const list = document.getElementById('approvedList');
+        if (snap.empty) { list.innerHTML = '<div class="admin-empty"><i class="fas fa-calendar"></i><p>No approved events yet.</p></div>'; return; }
+        list.innerHTML = '';
+        snap.forEach(doc => list.appendChild(buildEventCard(doc.id, doc.data(), false)));
+      });
+  }
+
+  function loadUsers() {
+    db.collection('users').orderBy('email')
+      .onSnapshot(snap => {
+        const list = document.getElementById('userList');
+        if (snap.empty) { list.innerHTML = '<div class="admin-empty"><i class="fas fa-users"></i><p>No users found.</p></div>'; return; }
+        list.innerHTML = '';
+        snap.forEach(doc => {
+          const u = doc.data(), isSelf = doc.id === adminUid;
+          const row = document.createElement('div'); row.className = 'user-row';
+          row.innerHTML = `
+            <div class="user-av"><i class="fas fa-user"></i></div>
+            <div class="user-info">
+              <div class="user-email">
+                ${esc(u.email||'No email')}
+                ${isSelf ? '<span class="self-badge">YOU</span>' : ''}
+              </div>
+              <div class="user-meta">
+                ${u.name ? esc(u.name) + ' &nbsp;·&nbsp; ' : ''}
+                <span class="role-badge ${u.isAdmin ? 'rb-admin' : 'rb-user'}">
+                  <i class="fas ${u.isAdmin ? 'fa-shield-alt' : 'fa-user'}"></i>
+                  ${u.isAdmin ? 'Admin' : 'User'}
+                </span>
+              </div>
+            </div>
+            <div>
+              ${!u.isAdmin
+                ? `<button class="btn-role btn-make-admin" onclick="setAdmin('${doc.id}',true)"><i class="fas fa-shield-alt"></i> Make Admin</button>`
+                : `<button class="btn-role btn-revoke-admin" onclick="setAdmin('${doc.id}',false)" ${isSelf ? 'disabled title="Cannot revoke yourself"' : ''}>
+                     <i class="fas fa-user-times"></i> Revoke
+                   </button>`
+              }
+            </div>`;
+          list.appendChild(row);
+        });
+      }, err => {
+        document.getElementById('userList').innerHTML = `<div class="admin-empty"><i class="fas fa-exclamation-circle" style="opacity:1;color:var(--accent);"></i><p>${err.message}</p></div>`;
+      });
+  }
+
+  function approveEv(id)   { db.collection('events').doc(id).update({approved:true}).then(()=>toast('✅ Event approved and now live!','success')).catch(e=>toast(e.message,'error')); }
+  function rejectEv(id)    { if(!confirm('Reject and permanently delete this event?')) return; db.collection('events').doc(id).delete().then(()=>toast('🗑️ Event rejected and deleted.','info')).catch(e=>toast(e.message,'error')); }
+  function unapproveEv(id) { if(!confirm('Move this event back to pending?')) return; db.collection('events').doc(id).update({approved:false}).then(()=>toast('Moved back to pending.','info')).catch(e=>toast(e.message,'error')); }
+  function deleteEv(id)    { if(!confirm('Permanently delete this approved event?')) return; db.collection('events').doc(id).delete().then(()=>toast('🗑️ Event deleted.','info')).catch(e=>toast(e.message,'error')); }
+  function setAdmin(uid, isAdmin) {
+    if (!isAdmin && uid === adminUid) { alert("You can't revoke your own admin access."); return; }
+    if (!confirm(isAdmin ? 'Grant this user admin privileges?' : 'Revoke admin privileges from this user?')) return;
+    db.collection('users').doc(uid).update({isAdmin})
+      .then(() => toast(isAdmin ? '✅ User is now an Admin.' : 'Admin access revoked.', isAdmin ? 'success' : 'info'))
+      .catch(e => toast(e.message, 'error'));
+  }
+
+  function toast(msg, type = 'info') {
+    const old = document.getElementById('eb-toast'); if (old) old.remove();
+    const icons = { success:'check-circle', error:'exclamation-circle', info:'info-circle' };
+    const el = document.createElement('div'); el.id = 'eb-toast'; el.className = 'toast ' + type;
+    el.innerHTML = `<i class="fas fa-${icons[type]||'info-circle'}"></i> ${msg}`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+  </script>
+</body>
+</html>

@@ -1,180 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventBee - Login</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventBee — Login</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="auth-body">
+<body class="auth-page">
 
-    <div class="auth-container">
-        <!-- Left Side -->
-        <div class="auth-brand">
-            <div class="brand-content">
-                <div class="logo">
-                    <div class="logo-icon"><i class="fas fa-calendar-check"></i></div>
-                    <span>EventBee</span>
-                </div>
-                <h2>Start your journey with us.</h2>
-                <p>Discover the best events happening around you. Login to explore, connect, and create memories.</p>
-            </div>
-        </div>
-
-        <!-- Right Side Forms -->
-        <div class="auth-forms">
-            
-            <!-- Login Form -->
-            <div class="form-box" id="loginBox">
-                <div class="form-header">
-                    <h1>Welcome Back</h1>
-                    <p>Login to continue</p>
-                </div>
-                
-                <div class="social-login">
-                    <button class="google-btn" id="googleLoginBtn">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G">
-                        Sign in with Google
-                    </button>
-                    <!-- NEW: Guest Login Button -->
-                    <button class="google-btn" id="guestLoginBtn" style="background: #f0f2f5; border: 1px solid #ccc;">
-                        <i class="fas fa-user-secret" style="font-size: 20px; color: #555;"></i>
-                        Continue as Guest
-                    </button>
-                </div>
-                
-                <div class="divider"><span>or use email</span></div>
-                
-                <form id="loginForm">
-                    <div class="input-group-auth"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email" required></div>
-                    <div class="input-group-auth"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password" required></div>
-                    <button type="submit" class="btn-submit-auth">Login</button>
-                </form>
-                <div class="switch-auth"><p>Don't have an account? <a id="showSignupBtn">Sign Up</a></p></div>
-            </div>
-
-            <!-- Signup Form -->
-            <div class="form-box hidden" id="signupBox">
-                <div class="form-header">
-                    <h1>Create Account</h1>
-                    <p>Join EventBee today</p>
-                </div>
-                <div class="social-login">
-                    <button class="google-btn" id="googleSignupBtn">
-                         <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G">
-                        Sign up with Google
-                    </button>
-                </div>
-                <div class="divider"><span>or register with email</span></div>
-                <form id="signupForm">
-                    <div class="input-group-auth"><i class="fas fa-user"></i><input type="text" id="signupName" placeholder="Full Name" required></div>
-                    <div class="input-group-auth"><i class="fas fa-envelope"></i><input type="email" id="signupEmail" placeholder="Email" required></div>
-                    <div class="input-group-auth"><i class="fas fa-lock"></i><input type="password" id="signupPassword" placeholder="Password" required></div>
-                    <button type="submit" class="btn-submit-auth">Sign Up</button>
-                </form>
-                <div class="switch-auth"><p>Already have an account? <a id="showLoginBtn">Login</a></p></div>
-            </div>
-
-        </div>
+  <!-- LEFT BRAND -->
+  <div class="auth-left">
+    <div class="auth-left-orb orb1"></div>
+    <div class="auth-left-orb orb2"></div>
+    <div class="auth-brand">
+      <div class="logo-row">
+        <div class="logo-icon"><i class="fas fa-calendar-check"></i></div>
+        <div class="logo-name">EventBee</div>
+      </div>
+      <h2>Discover &amp; Create Unforgettable Events</h2>
+      <p>Join a community of event creators and explorers. Sign in to browse, share, and create events happening right now.</p>
+      <div class="auth-features">
+        <div class="auth-feat"><i class="fas fa-calendar-plus"></i><span>Create events with instant sharing</span></div>
+        <div class="auth-feat"><i class="fab fa-whatsapp"></i><span>Share events via WhatsApp &amp; Email</span></div>
+        <div class="auth-feat"><i class="fas fa-map-marker-alt"></i><span>Get directions to any event instantly</span></div>
+        <div class="auth-feat"><i class="fas fa-shield-alt"></i><span>All events reviewed before going live</span></div>
+      </div>
     </div>
+  </div>
 
-    <!-- Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    
-    <script>
-        // ==========================================
-        // 1. FIREBASE CONFIG
-        // ==========================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyB_Fv9HLMOy9cCHT2cZLLwRQOGGBHA_8N0",
-            authDomain: "myapp-94cf9.firebaseapp.com",
-            projectId: "myapp-94cf9",
-            storageBucket: "myapp-94cf9.firebasestorage.app",
-            messagingSenderId: "542065139667",
-            appId: "1:542065139667:web:76ed67d78188ff3e6dd926"
-        };
+  <!-- RIGHT FORMS -->
+  <div class="auth-right">
+    <div class="auth-box">
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+      <div class="auth-tab-row">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+      </div>
 
-        // ==========================================
-        // 2. AUTH STATE LISTENER
-        // ==========================================
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                window.location.href = 'home.html';
-            }
-        });
+      <!-- LOGIN -->
+      <div class="auth-panel active" id="panel-login">
+        <h3>Welcome back 👋</h3>
+        <p>Login to your EventBee account to continue</p>
 
-        // ==========================================
-        // 3. UI SWITCHING
-        // ==========================================
-        const loginBox = document.getElementById('loginBox');
-        const signupBox = document.getElementById('signupBox');
-        
-        document.getElementById('showSignupBtn').addEventListener('click', () => {
-            loginBox.classList.add('hidden');
-            signupBox.classList.remove('hidden');
-        });
+        <button class="social-btn" id="googleLoginBtn">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Continue with Google
+        </button>
+        <button class="social-btn guest-btn" id="guestLoginBtn">
+          <i class="fas fa-user-secret" style="font-size:1rem;"></i> Browse as Guest (read-only)
+        </button>
 
-        document.getElementById('showLoginBtn').addEventListener('click', () => {
-            signupBox.classList.add('hidden');
-            loginBox.classList.remove('hidden');
-        });
+        <div class="divider-auth"><span>or use email</span></div>
 
-        // ==========================================
-        // 4. LOGIN LOGIC
-        // ==========================================
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const pass = document.getElementById('loginPassword').value;
-            try {
-                await auth.signInWithEmailAndPassword(email, pass);
-            } catch (err) { alert(err.message); }
-        });
+        <div class="field">
+          <label>Email Address</label>
+          <div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email"></div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password"></div>
+        </div>
 
-        // Google Login
-        document.getElementById('googleLoginBtn').addEventListener('click', async () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            try { await auth.signInWithPopup(provider); } catch (err) { alert(err.message); }
-        });
+        <div class="msg" id="loginMsg"></div>
+        <button class="btn-auth" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+      </div>
 
-        // NEW: Guest Login
-        document.getElementById('guestLoginBtn').addEventListener('click', async () => {
-            try {
-                await auth.signInAnonymously();
-            } catch (err) { 
-                alert(err.message); 
-            }
-        });
+      <!-- SIGNUP -->
+      <div class="auth-panel" id="panel-signup">
+        <h3>Create account 🎉</h3>
+        <p>Join EventBee and start discovering events</p>
 
-        // ==========================================
-        // 5. SIGNUP LOGIC
-        // ==========================================
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const pass = document.getElementById('signupPassword').value;
+        <button class="social-btn" id="googleSignupBtn">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Sign up with Google
+        </button>
 
-            try {
-                const cred = await auth.createUserWithEmailAndPassword(email, pass);
-                await cred.user.updateProfile({ displayName: name });
-                await db.collection('users').doc(cred.user.uid).set({ name, email });
-            } catch (err) { alert(err.message); }
-        });
+        <div class="divider-auth"><span>or register with email</span></div>
 
-        document.getElementById('googleSignupBtn').addEventListener('click', async () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            try { await auth.signInWithPopup(provider); } catch (err) { alert(err.message); }
-        });
-    </script>
+        <div class="field">
+          <label>Full Name</label>
+          <div class="input-wrap"><i class="fas fa-user"></i><input type="text" id="signupName" placeholder="Your full name"></div>
+        </div>
+        <div class="field">
+          <label>Email Address</label>
+          <div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email"></div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="signupPassword" placeholder="Min. 6 characters" autocomplete="new-password"></div>
+        </div>
+
+        <div class="msg" id="signupMsg"></div>
+        <button class="btn-auth" id="signupBtn"><i class="fas fa-user-plus"></i> Create Account</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+  auth.onAuthStateChanged(u => { if(u) window.location.href='home.html'; });
+
+  function switchTab(t){
+    ['login','signup'].forEach(x=>{
+      document.getElementById('tab-'+x).classList.toggle('active',x===t);
+      document.getElementById('panel-'+x).classList.toggle('active',x===t);
+    });
+  }
+  function setMsg(id,msg,type){ const e=document.getElementById(id); e.textContent=msg; e.className='msg '+type; }
+  function setBtnLoading(id,on,lbl,icon){
+    const b=document.getElementById(id); b.disabled=on;
+    b.innerHTML=on?'<span class="spinner"></span> Please wait…':`<i class="${icon}"></i> ${lbl}`;
+  }
+  async function ensureUserDoc(user,extra={}){
+    const ref=db.collection('users').doc(user.uid);
+    const s=await ref.get();
+    if(!s.exists) await ref.set({name:user.displayName||extra.name||null,email:user.email||null,isAdmin:false,createdAt:firebase.firestore.FieldValue.serverTimestamp(),...extra});
+  }
+
+  // Login
+  document.getElementById('loginBtn').addEventListener('click',async()=>{
+    const e=document.getElementById('loginEmail').value.trim();
+    const p=document.getElementById('loginPassword').value;
+    if(!e||!p){setMsg('loginMsg','Please fill in all fields.','error');return;}
+    setBtnLoading('loginBtn',true);
+    try{ await auth.signInWithEmailAndPassword(e,p); }
+    catch(err){ setMsg('loginMsg',err.message,'error'); setBtnLoading('loginBtn',false,'Login','fas fa-sign-in-alt'); }
+  });
+  ['loginEmail','loginPassword'].forEach(id=>document.getElementById(id).addEventListener('keypress',e=>{if(e.key==='Enter')document.getElementById('loginBtn').click();}));
+
+  document.getElementById('googleLoginBtn').addEventListener('click',async()=>{
+    try{ const r=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); await ensureUserDoc(r.user); }
+    catch(e){ setMsg('loginMsg',e.message,'error'); }
+  });
+  document.getElementById('guestLoginBtn').addEventListener('click',async()=>{
+    try{ await auth.signInAnonymously(); }catch(e){ setMsg('loginMsg',e.message,'error'); }
+  });
+
+  // Signup
+  document.getElementById('signupBtn').addEventListener('click',async()=>{
+    const n=document.getElementById('signupName').value.trim();
+    const e=document.getElementById('signupEmail').value.trim();
+    const p=document.getElementById('signupPassword').value;
+    if(!n||!e||!p){setMsg('signupMsg','Please fill in all fields.','error');return;}
+    if(p.length<6){setMsg('signupMsg','Password must be at least 6 characters.','error');return;}
+    setBtnLoading('signupBtn',true);
+    try{
+      const c=await auth.createUserWithEmailAndPassword(e,p);
+      await c.user.updateProfile({displayName:n});
+      await ensureUserDoc(c.user,{name:n});
+    }catch(err){ setMsg('signupMsg',err.message,'error'); setBtnLoading('signupBtn',false,'Create Account','fas fa-user-plus'); }
+  });
+  document.getElementById('googleSignupBtn').addEventListener('click',async()=>{
+    try{ const r=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); await ensureUserDoc(r.user); }
+    catch(e){ setMsg('signupMsg',e.message,'error'); }
+  });
+  </script>
 </body>
 </html>

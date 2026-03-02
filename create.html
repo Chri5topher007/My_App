@@ -1,123 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Event - EventBee</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventBee — Create Event</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="home.html" class="logo">
-                <div class="logo-icon"><i class="fas fa-calendar-check"></i></div>
-                <span>EventBee</span>
-            </a>
-            <div class="nav-links">
-                <a href="home.html" class="btn-create"><i class="fas fa-arrow-left"></i> Back</a>
-                <button id="logoutBtnCreate" class="btn-create">Logout</button>
-            </div>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="home.html" class="nav-logo">
+        <div class="nav-logo-icon"><i class="fas fa-calendar-check"></i></div>
+        Event<em>Bee</em>
+      </a>
+      <div class="nav-actions">
+        <a href="home.html" class="btn-nav btn-ghost"><i class="fas fa-arrow-left"></i> Back</a>
+        <button id="logoutBtn" class="btn-nav btn-ghost"><i class="fas fa-sign-out-alt"></i></button>
+        <img id="userAvatar" src="https://i.pravatar.cc/40?img=12" alt="" class="nav-avatar">
+      </div>
+    </div>
+  </nav>
+
+  <main class="create-page">
+    <div class="create-wrap">
+      <div class="page-head">
+        <h1>Create an Event</h1>
+        <p>Your event will be reviewed by an admin before appearing publicly.</p>
+      </div>
+
+      <div class="create-card">
+        <div class="create-card-head">
+          <i class="fas fa-calendar-plus"></i>
+          <div>
+            <h2>Event Details</h2>
+            <p>Fill in all the details for your event</p>
+          </div>
         </div>
-    </nav>
 
-    <main class="create-section">
-        <div class="container">
-            <div class="form-wrapper">
-                <div class="form-header">
-                    <h1>Create Your Event</h1>
-                    <p>Fill details to publish</p>
-                </div>
-                <form id="eventForm">
-                    <div class="form-group">
-                        <label>Event Title</label>
-                        <input type="text" id="eventTitle" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Date</label>
-                            <input type="date" id="eventDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Time</label>
-                            <input type="time" id="eventTime" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Location</label>
-                        <input type="text" id="eventLocation" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select id="eventCategory">
-                                <option>Business</option>
-                                <option>Music</option>
-                                <option>Food</option>
-                                <option>Sports</option>
-                                <option>Arts</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Price ($)</label>
-                            <input type="number" id="eventPrice" placeholder="0 for Free">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Image URL (Optional)</label>
-                        <input type="text" id="eventImage" placeholder="https://...">
-                    </div>
-                    <button type="submit" class="btn-submit">Publish Event</button>
-                </form>
+        <div class="create-body">
+          <div class="notice">
+            <i class="fas fa-hourglass-half"></i>
+            <p><strong>Pending Approval:</strong> Once submitted, your event will only go live after an admin approves it. Users will be able to share it and get directions once approved.</p>
+          </div>
+
+          <form id="eventForm" novalidate>
+            <div class="form-group">
+              <label>Event Title *</label>
+              <input class="form-input" type="text" id="evTitle" placeholder="e.g. Summer Music Fest 2024" required>
             </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-textarea" id="evDesc" placeholder="What to expect, who it's for, what to bring…"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Date *</label>
+                <input class="form-input" type="date" id="evDate" required>
+              </div>
+              <div class="form-group">
+                <label>Time *</label>
+                <input class="form-input" type="time" id="evTime" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Location / Venue *</label>
+              <input class="form-input" type="text" id="evLocation" placeholder="e.g. Lulu Mall, Kochi, Kerala" required>
+              <p class="form-hint"><i class="fas fa-info-circle"></i> Enter a full address or venue name for accurate directions on Google Maps</p>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Category *</label>
+                <select class="form-select" id="evCategory" required>
+                  <option value="">Select category…</option>
+                  <option>Music</option>
+                  <option>Business</option>
+                  <option>Food</option>
+                  <option>Sports</option>
+                  <option>Arts</option>
+                  <option>Tech</option>
+                  <option>Health</option>
+                  <option>Education</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Ticket Price ($)</label>
+                <input class="form-input" type="number" id="evPrice" placeholder="0 = Free" min="0" step="0.01">
+                <p class="form-hint">Leave blank or 0 for a free event</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Event Image URL</label>
+              <input class="form-input" type="url" id="evImage" placeholder="https://example.com/image.jpg">
+              <p class="form-hint">Paste a direct image link. Leave empty for a default image.</p>
+              <div class="img-preview" id="imgPreview">
+                <div class="img-placeholder"><i class="fas fa-image"></i><p>Preview appears here</p></div>
+                <img id="previewImg" src="" alt="Preview">
+              </div>
+            </div>
+
+            <div class="msg" id="formMsg"></div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+              <i class="fas fa-paper-plane"></i> Submit for Approval
+            </button>
+          </form>
         </div>
-    </main>
+      </div>
+    </div>
+  </main>
 
-    <!-- Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="app.js"></script>
-    <script>
-        // Specific Logic for Create Page
-        const eventForm = document.getElementById('eventForm');
-        
-        eventForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('eventTitle').value;
-            const date = document.getElementById('eventDate').value;
-            const time = document.getElementById('eventTime').value;
-            const location = document.getElementById('eventLocation').value;
-            const category = document.getElementById('eventCategory').value;
-            const price = document.getElementById('eventPrice').value;
-            const image = document.getElementById('eventImage').value || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80";
+  <footer class="footer"><p>&copy; 2024 EventBee</p></footer>
 
-            try {
-                await db.collection('events').add({
-                    title, 
-                    date: new Date(date), 
-                    time, 
-                    location, 
-                    category, 
-                    price: price || "0",
-                    image,
-                    isFree: price > 0 ? false : true,
-                    authorId: auth.currentUser.uid,
-                    authorName: auth.currentUser.displayName
-                });
-                alert("Event Created!");
-                window.location.href = 'home.html';
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-        });
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+  auth.onAuthStateChanged(user=>{
+    if(!user||user.isAnonymous){ window.location.href='index.html'; return; }
+    if(user.photoURL) document.getElementById('userAvatar').src=user.photoURL;
+    document.getElementById('logoutBtn').addEventListener('click',()=>auth.signOut().then(()=>window.location.href='index.html'));
+  });
 
-        document.getElementById('logoutBtnCreate').addEventListener('click', () => {
-            auth.signOut();
-        });
-    </script>
+  // Image preview
+  document.getElementById('evImage').addEventListener('input',function(){
+    const box=document.getElementById('imgPreview');
+    const img=document.getElementById('previewImg');
+    if(this.value){ img.src=this.value; img.onload=()=>box.classList.add('loaded'); img.onerror=()=>box.classList.remove('loaded'); }
+    else box.classList.remove('loaded');
+  });
+
+  document.getElementById('evDate').min=new Date().toISOString().split('T')[0];
+
+  function showMsg(t,type){ const e=document.getElementById('formMsg'); e.textContent=t; e.className='msg '+type; e.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+
+  document.getElementById('eventForm').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const user=auth.currentUser; if(!user) return;
+    const title=document.getElementById('evTitle').value.trim();
+    const desc=document.getElementById('evDesc').value.trim();
+    const date=document.getElementById('evDate').value;
+    const time=document.getElementById('evTime').value;
+    const loc=document.getElementById('evLocation').value.trim();
+    const cat=document.getElementById('evCategory').value;
+    const priceVal=document.getElementById('evPrice').value;
+    const imgUrl=document.getElementById('evImage').value.trim();
+
+    if(!title) { showMsg('Event title is required.','error'); return; }
+    if(!date)  { showMsg('Please select a date.','error'); return; }
+    if(!time)  { showMsg('Please select a time.','error'); return; }
+    if(!loc)   { showMsg('Location is required.','error'); return; }
+    if(!cat)   { showMsg('Please select a category.','error'); return; }
+
+    const price=parseFloat(priceVal)||0;
+    const isFree=price===0;
+    const image=imgUrl||'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';
+    let eventDate;
+    try{ eventDate=new Date(date+'T'+(time||'00:00')); }
+    catch{ showMsg('Invalid date or time.','error'); return; }
+
+    const btn=document.getElementById('submitBtn');
+    btn.disabled=true;
+    btn.innerHTML='<span class="spinner"></span> Submitting…';
+
+    try{
+      await db.collection('events').add({
+        title, description:desc,
+        date: firebase.firestore.Timestamp.fromDate(eventDate),
+        location: loc, category: cat,
+        price: price.toFixed(2), isFree, image,
+        createdBy: user.email||user.displayName||'Organizer',
+        creatorId: user.uid,
+        approved: false,   // ← requires admin approval
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      showMsg('🎉 Event submitted! It will go live once an admin approves it.','success');
+      btn.innerHTML='<i class="fas fa-check"></i> Submitted!';
+      setTimeout(()=>window.location.href='home.html',2500);
+    }catch(err){
+      showMsg('Error: '+err.message,'error');
+      btn.disabled=false;
+      btn.innerHTML='<i class="fas fa-paper-plane"></i> Submit for Approval';
+    }
+  });
+  </script>
 </body>
 </html>

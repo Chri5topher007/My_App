@@ -1,96 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventBee - Home</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventBee — Discover Events</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="home.html" class="logo">
-                <div class="logo-icon"><i class="fas fa-calendar-check"></i></div>
-                <span>EventBee</span>
-            </a>
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" id="navSearch" placeholder="Search events...">
-            </div>
-            <div class="nav-links">
-                <a href="create.html" class="btn-create"><i class="fas fa-plus"></i> <span>Create Event</span></a>
-                <button id="logoutBtn" class="btn-create"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></button>
-                <div class="user-profile">
-                    <img id="userPhoto" src="https://i.pravatar.cc/40?img=12" alt="User">
-                </div>
-            </div>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="home.html" class="nav-logo">
+        <div class="nav-logo-icon"><i class="fas fa-calendar-check"></i></div>
+        Event<em>Bee</em>
+      </a>
+      <div class="nav-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="navSearch" placeholder="Search events…">
+      </div>
+      <div class="nav-actions">
+        <a href="create.html" id="createBtn" class="btn-nav btn-primary hidden">
+          <i class="fas fa-plus"></i> <span>Create Event</span>
+        </a>
+        <a href="admin.html" id="adminBtn" class="btn-nav btn-admin hidden">
+          <i class="fas fa-shield-alt"></i> <span>Admin</span>
+        </a>
+        <button id="logoutBtn" class="btn-nav btn-ghost">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+        <img id="userAvatar" src="https://i.pravatar.cc/40?img=12" alt="" class="nav-avatar">
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-orb1"></div>
+    <div class="hero-orb2"></div>
+    <div class="hero-inner">
+      <div class="hero-pill"><i class="fas fa-fire"></i>&nbsp; Trending Near You</div>
+      <h1>Discover <span>Events</span><br>That Move You</h1>
+      <p>Music · Food · Business · Sports · Arts &amp; more — all in one place</p>
+      <div class="hero-search">
+        <i class="fas fa-search" style="color:rgba(255,255,255,.3);"></i>
+        <input type="text" id="heroSearch" placeholder="Search events, venues, artists…">
+        <div class="sep"></div>
+        <input type="text" id="heroLocation" placeholder="📍 City or location" style="max-width:170px;">
+        <button class="btn-search" id="heroSearchBtn"><i class="fas fa-search"></i> Search</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+
+      <!-- Categories -->
+      <div class="cats-wrap">
+        <div class="cats-scroll" id="catsRow">
+          <div class="cat-chip active" data-cat="All"><i class="fas fa-globe"></i> All</div>
+          <div class="cat-chip" data-cat="Music"><i class="fas fa-music"></i> Music</div>
+          <div class="cat-chip" data-cat="Business"><i class="fas fa-briefcase"></i> Business</div>
+          <div class="cat-chip" data-cat="Food"><i class="fas fa-utensils"></i> Food</div>
+          <div class="cat-chip" data-cat="Sports"><i class="fas fa-futbol"></i> Sports</div>
+          <div class="cat-chip" data-cat="Arts"><i class="fas fa-palette"></i> Arts</div>
+          <div class="cat-chip" data-cat="Tech"><i class="fas fa-laptop-code"></i> Tech</div>
+          <div class="cat-chip" data-cat="Health"><i class="fas fa-heart-pulse"></i> Health</div>
+          <div class="cat-chip" data-cat="Education"><i class="fas fa-graduation-cap"></i> Education</div>
         </div>
-    </nav>
+      </div>
 
-    <!-- Hero Section -->
-    <header class="hero-section">
-        <div class="hero-content">
-            <h1>Discover <span>Events</span> Near You</h1>
-            <p>Explore the best events happening in your city</p>
-            <div class="search-main">
-                <div class="input-group search-input">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="heroSearch" placeholder="Search events...">
-                </div>
-                <div class="input-group location-input">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <input type="text" id="heroLocation" placeholder="Location">
-                </div>
-                <button class="btn-search-hero" id="heroSearchBtn">Search</button>
-            </div>
+      <!-- Events -->
+      <div class="events-section">
+        <div class="section-top">
+          <h2>Upcoming Events</h2>
+          <div class="filters">
+            <button class="filter-pill active" data-filter="All">All</button>
+            <button class="filter-pill" data-filter="Today">Today</button>
+            <button class="filter-pill" data-filter="Tomorrow">Tomorrow</button>
+            <button class="filter-pill" data-filter="Weekend">Weekend</button>
+          </div>
         </div>
-    </header>
-
-    <!-- Categories -->
-    <section class="categories-section">
-        <div class="container">
-            <div class="category-grid" id="categoryGrid">
-                <div class="cat-item active" data-cat="All"><div class="cat-circle"><i class="fas fa-globe"></i></div><span>All</span></div>
-                <div class="cat-item" data-cat="Music"><div class="cat-circle"><i class="fas fa-music"></i></div><span>Music</span></div>
-                <div class="cat-item" data-cat="Business"><div class="cat-circle"><i class="fas fa-briefcase"></i></div><span>Business</span></div>
-                <div class="cat-item" data-cat="Food"><div class="cat-circle"><i class="fas fa-utensils"></i></div><span>Food</span></div>
-                <div class="cat-item" data-cat="Sports"><div class="cat-circle"><i class="fas fa-futbol"></i></div><span>Sports</span></div>
-                <div class="cat-item" data-cat="Arts"><div class="cat-circle"><i class="fas fa-palette"></i></div><span>Arts</span></div>
-            </div>
+        <div class="events-grid" id="eventsGrid">
+          <div class="events-empty">
+            <span class="spinner" style="width:36px;height:36px;border-width:3px;"></span>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- Events Grid -->
-    <main class="main-content">
-        <div class="container">
-            <div class="section-top">
-                <h2>Upcoming Events</h2>
-                <div class="filters">
-                    <button class="filter-btn active" data-filter="All">All</button>
-                    <button class="filter-btn" data-filter="Today">Today</button>
-                    <button class="filter-btn" data-filter="Tomorrow">Tomorrow</button>
-                </div>
-            </div>
-            <div class="events-grid" id="eventsGrid">
-                <!-- Events loaded here -->
-            </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2024 EventBee &nbsp;·&nbsp; <a href="setup-admin.html">First-time Admin Setup</a></p>
+  </footer>
+
+  <!-- ══════════════════ EVENT DETAIL MODAL ══════════════════ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-img-wrap">
+        <img id="modalImg" class="modal-img" src="" alt="">
+        <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-cat" id="modalCat"></div>
+        <div class="modal-title" id="modalTitle"></div>
+
+        <!-- Meta grid: date, time, location, price -->
+        <div class="modal-meta-grid">
+          <div class="modal-meta-item">
+            <div class="mmi-icon"><i class="fas fa-calendar"></i></div>
+            <div><div class="mmi-label">Date</div><div class="mmi-val" id="modalDate"></div></div>
+          </div>
+          <div class="modal-meta-item">
+            <div class="mmi-icon"><i class="fas fa-clock"></i></div>
+            <div><div class="mmi-label">Time</div><div class="mmi-val" id="modalTime"></div></div>
+          </div>
+          <div class="modal-meta-item">
+            <div class="mmi-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div><div class="mmi-label">Location</div><div class="mmi-val" id="modalLocation"></div></div>
+          </div>
+          <div class="modal-meta-item">
+            <div class="mmi-icon"><i class="fas fa-ticket-alt"></i></div>
+            <div><div class="mmi-label">Price</div><div class="mmi-val" id="modalPrice"></div></div>
+          </div>
         </div>
-    </main>
 
-    <footer class="footer">
-        <p>&copy; 2024 EventBee. All rights reserved.</p>
-    </footer>
+        <p class="modal-desc" id="modalDesc"></p>
 
-    <!-- Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="app.js"></script>
+        <!-- Share + Directions -->
+        <div class="modal-actions">
+          <button class="btn-modal-action btn-wa" id="modalWA">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </button>
+          <button class="btn-modal-action btn-mail" id="modalMail">
+            <i class="fas fa-envelope"></i> Email
+          </button>
+          <button class="btn-modal-action btn-maps" id="modalMaps">
+            <i class="fas fa-directions"></i> Directions
+          </button>
+        </div>
+
+        <!-- Embedded map -->
+        <div class="modal-map-embed" id="modalMapWrap">
+          <iframe id="modalMapFrame" src="" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+  let allEvents = [];
+  let currentCat = 'All', currentFilter = 'All', searchQ = '';
+
+  // ── Auth ──
+  auth.onAuthStateChanged(user => {
+    if(!user){ window.location.href='index.html'; return; }
+
+    if(user.photoURL) document.getElementById('userAvatar').src=user.photoURL;
+    if(!user.isAnonymous) document.getElementById('createBtn').classList.remove('hidden');
+
+    db.collection('users').doc(user.uid).get().then(doc=>{
+      if(doc.exists && doc.data().isAdmin) document.getElementById('adminBtn').classList.remove('hidden');
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click',()=>auth.signOut().then(()=>window.location.href='index.html'));
+
+    loadEvents();
+    setupUI();
+  });
+
+  // ── Load events ──
+  function loadEvents(){
+    db.collection('events').where('approved','==',true).orderBy('date','asc')
+      .onSnapshot(snap=>{
+        allEvents=[];
+        snap.forEach(d=>allEvents.push({id:d.id,...d.data()}));
+        renderEvents();
+      }, err=>{
+        document.getElementById('eventsGrid').innerHTML=`<div class="events-empty"><i class="fas fa-exclamation-circle"></i><p>${err.message}</p></div>`;
+      });
+  }
+
+  // ── Render ──
+  const MONTHS=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+  function toDate(v){ if(!v) return null; return v.toDate?v.toDate():new Date(v); }
+  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function renderEvents(){
+    const grid=document.getElementById('eventsGrid');
+    let list=[...allEvents];
+
+    if(currentCat!=='All') list=list.filter(e=>e.category===currentCat);
+    if(searchQ){ const q=searchQ.toLowerCase(); list=list.filter(e=>(e.title||'').toLowerCase().includes(q)||(e.location||'').toLowerCase().includes(q)); }
+
+    const today=new Date(); today.setHours(0,0,0,0);
+    const tom=new Date(today); tom.setDate(tom.getDate()+1);
+    const wkStart=new Date(today); wkStart.setDate(today.getDate()+(6-today.getDay()));
+    const wkEnd=new Date(wkStart); wkEnd.setDate(wkStart.getDate()+1);
+
+    if(currentFilter==='Today') list=list.filter(e=>{const d=toDate(e.date);return d&&d.toDateString()===today.toDateString();});
+    else if(currentFilter==='Tomorrow') list=list.filter(e=>{const d=toDate(e.date);return d&&d.toDateString()===tom.toDateString();});
+    else if(currentFilter==='Weekend') list=list.filter(e=>{const d=toDate(e.date);return d&&d>=wkStart&&d<=wkEnd;});
+
+    if(!list.length){
+      grid.innerHTML=`<div class="events-empty"><i class="fas fa-calendar-times"></i><p>No events found. Try a different filter.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML=list.map(ev=>{
+      const d=toDate(ev.date)||new Date();
+      const img=ev.image||'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80';
+      const shareText=encodeURIComponent(`🎉 ${ev.title}\n📅 ${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}\n📍 ${ev.location||''}\n\nSee more on EventBee!`);
+      const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ev.location||'')}`;
+      return `
+      <div class="event-card" onclick="openModal('${ev.id}')">
+        <div class="card-img">
+          <img src="${esc(img)}" alt="${esc(ev.title)}" onerror="this.src='https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80'">
+          <span class="card-cat">${esc(ev.category||'General')}</span>
+          ${ev.isFree?'<span class="card-free">FREE</span>':''}
+        </div>
+        <div class="card-body">
+          <div class="card-date-row"><i class="fas fa-calendar"></i>${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}</div>
+          <div class="card-title">${esc(ev.title)}</div>
+          <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${esc(ev.location||'Location TBD')}</div>
+          <div class="card-meta"><i class="fas fa-user"></i>By ${esc(ev.createdBy||'Organizer')}</div>
+        </div>
+        <div class="card-footer">
+          <div class="card-price">${ev.isFree?'🎟️ Free':'💰 $'+(ev.price||'0')}</div>
+          <button class="btn-card-open">View <i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div class="card-actions" onclick="event.stopPropagation()">
+          <button class="btn-card-action whatsapp" onclick="shareWA('${ev.id}')"><i class="fab fa-whatsapp"></i> Share</button>
+          <button class="btn-card-action mail"      onclick="shareMail('${ev.id}')"><i class="fas fa-envelope"></i> Email</button>
+          <button class="btn-card-action maps"      onclick="openMaps('${encodeURIComponent(ev.location||'')}')"><i class="fas fa-directions"></i> Directions</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Modal ──
+  function openModal(id){
+    const ev=allEvents.find(e=>e.id===id); if(!ev) return;
+    const d=toDate(ev.date)||new Date();
+    const img=ev.image||'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';
+    const loc=ev.location||'';
+
+    document.getElementById('modalImg').src=img;
+    document.getElementById('modalImg').onerror=function(){this.src='https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';};
+    document.getElementById('modalCat').innerHTML=`<i class="fas fa-tag"></i> ${esc(ev.category||'General')}`;
+    document.getElementById('modalTitle').textContent=ev.title||'';
+    document.getElementById('modalDate').textContent=DAYS[d.getDay()]+', '+MONTHS[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+    document.getElementById('modalTime').textContent=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('modalLocation').textContent=loc||'Location TBD';
+    document.getElementById('modalPrice').textContent=ev.isFree?'🎟️ Free Entry':'💰 $'+(ev.price||'0');
+    document.getElementById('modalDesc').textContent=ev.description||'No description provided.';
+
+    // Embedded Google Map
+    const mapSrc=`https://maps.google.com/maps?q=${encodeURIComponent(loc)}&output=embed&z=15`;
+    document.getElementById('modalMapFrame').src=mapSrc;
+
+    // Share buttons
+    const shareText=`🎉 ${ev.title}\n📅 ${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}\n📍 ${loc}\n${ev.isFree?'🎟️ Free Entry':'💰 $'+ev.price}\n\nDiscover more events on EventBee!`;
+    document.getElementById('modalWA').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(shareText),'_blank');
+    document.getElementById('modalMail').onclick=()=>window.open(`mailto:?subject=${encodeURIComponent('Check out: '+ev.title)}&body=${encodeURIComponent(shareText)}`, '_blank');
+    document.getElementById('modalMaps').onclick=()=>window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`, '_blank');
+
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+
+  // Share helpers from card buttons
+  function shareWA(id){
+    const ev=allEvents.find(e=>e.id===id); if(!ev) return;
+    const d=toDate(ev.date)||new Date();
+    const t=`🎉 ${ev.title}\n📅 ${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}\n📍 ${ev.location||''}\n${ev.isFree?'🎟️ Free':'💰 $'+ev.price}\n\nDiscover more on EventBee!`;
+    window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
+  }
+  function shareMail(id){
+    const ev=allEvents.find(e=>e.id===id); if(!ev) return;
+    const d=toDate(ev.date)||new Date();
+    const t=`🎉 ${ev.title}\n📅 ${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}\n📍 ${ev.location||''}\n${ev.isFree?'🎟️ Free':'💰 $'+ev.price}`;
+    window.open(`mailto:?subject=${encodeURIComponent('Check out: '+ev.title)}&body=${encodeURIComponent(t)}`,'_blank');
+  }
+  function openMaps(locEncoded){
+    window.open(`https://www.google.com/maps/search/?api=1&query=${locEncoded}`,'_blank');
+  }
+
+  // Close modal
+  document.getElementById('modalClose').addEventListener('click',closeModal);
+  document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('modalOverlay')) closeModal(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+  function closeModal(){
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow='';
+    document.getElementById('modalMapFrame').src='';
+  }
+
+  // ── UI setup ──
+  function setupUI(){
+    document.querySelectorAll('.cat-chip').forEach(c=>{
+      c.addEventListener('click',()=>{
+        document.querySelectorAll('.cat-chip').forEach(x=>x.classList.remove('active'));
+        c.classList.add('active'); currentCat=c.dataset.cat; renderEvents();
+      });
+    });
+    document.querySelectorAll('.filter-pill').forEach(p=>{
+      p.addEventListener('click',()=>{
+        document.querySelectorAll('.filter-pill').forEach(x=>x.classList.remove('active'));
+        p.classList.add('active'); currentFilter=p.dataset.filter; renderEvents();
+      });
+    });
+    const doSearch=()=>{ searchQ=document.getElementById('heroSearch').value; renderEvents(); };
+    document.getElementById('heroSearchBtn').addEventListener('click',doSearch);
+    document.getElementById('heroSearch').addEventListener('keypress',e=>{ if(e.key==='Enter') doSearch(); });
+    document.getElementById('navSearch').addEventListener('input',e=>{ searchQ=e.target.value; renderEvents(); });
+  }
+  </script>
 </body>
 </html>

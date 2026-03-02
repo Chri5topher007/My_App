@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventBee — First Admin Setup</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="setup-page">
+  <div class="setup-orb1"></div>
+  <div class="setup-orb2"></div>
+  <div class="setup-card">
+    <div class="setup-logo">
+      <div class="li"><i class="fas fa-calendar-check"></i></div>
+      <span>Event<em>Bee</em></span>
+    </div>
+
+    <div class="setup-screen active" id="scr-loading">
+      <div style="text-align:center;padding:40px 0;">
+        <span class="spinner" style="width:40px;height:40px;border-width:3px;"></span>
+        <p style="color:var(--text2);font-size:.875rem;margin-top:18px;">Checking system…</p>
+      </div>
+    </div>
+
+    <div class="setup-screen" id="scr-blocked">
+      <div class="blocked-icon"><i class="fas fa-lock"></i></div>
+      <h2 class="setup-title" style="text-align:center;color:var(--accent);">Already Set Up</h2>
+      <p class="setup-sub" style="text-align:center;">An admin exists. This page is permanently locked.</p>
+      <a href="index.html"><button class="btn-setup"><i class="fas fa-arrow-left"></i> Back to Login</button></a>
+    </div>
+
+    <div class="setup-screen" id="scr-auth">
+      <div class="eyebrow">Step 1 of 2</div>
+      <h1 class="setup-title">Identify Yourself</h1>
+      <p class="setup-sub">Sign in or create the account that will become the first admin.</p>
+      <div class="setup-notice"><i class="fas fa-shield-check"></i><p>This page is only active because <strong>no admin exists yet</strong>. It locks permanently after setup.</p></div>
+      <div class="step-pips"><div class="pip active"></div><div class="pip"></div></div>
+      <button class="social-btn" id="googleSetupBtn">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Continue with Google
+      </button>
+      <div class="divider-auth"><span>or with email</span></div>
+      <div class="field"><label>Email</label><div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" id="setupEmail" placeholder="you@example.com"></div></div>
+      <div class="field"><label>Password</label><div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="setupPass" placeholder="Password"></div></div>
+      <div class="msg" id="authMsg"></div>
+      <button class="btn-setup" id="authBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <button class="btn-setup-ghost" id="toggleAuthBtn">No account? Sign up instead</button>
+      <div style="text-align:center;margin-top:14px;font-size:.8rem;"><a href="index.html" style="color:var(--text2);"><i class="fas fa-arrow-left"></i> Back to app</a></div>
+    </div>
+
+    <div class="setup-screen" id="scr-confirm">
+      <div class="eyebrow">Step 2 of 2</div>
+      <h1 class="setup-title">Enter Setup Key</h1>
+      <p class="setup-sub">Enter the secret key to grant admin access to your account.</p>
+      <div class="step-pips"><div class="pip done"></div><div class="pip active"></div></div>
+      <div class="confirm-pill">
+        <img id="pillPhoto" src="https://i.pravatar.cc/40" alt="">
+        <div><div class="cp-name" id="pillName">—</div><div class="cp-email" id="pillEmail">—</div></div>
+        <span class="cp-badge">PENDING ADMIN</span>
+      </div>
+      <div class="field">
+        <label>Secret Setup Key</label>
+        <div class="input-wrap"><i class="fas fa-key"></i><input type="password" id="keyInput" placeholder="Enter the setup key"></div>
+        <p class="key-hint">Default key: <code>EVENTBEE_ADMIN_2024</code><br>Change <code>SETUP_KEY</code> in this file before deploying.</p>
+      </div>
+      <div class="msg" id="keyMsg"></div>
+      <button class="btn-setup" id="activateBtn"><i class="fas fa-crown"></i> Activate Admin Access</button>
+      <button class="btn-setup-ghost" id="backToAuthBtn"><i class="fas fa-arrow-left"></i> Use a different account</button>
+    </div>
+
+    <div class="setup-screen" id="scr-success">
+      <div class="success-icon"><i class="fas fa-crown"></i></div>
+      <h2 class="setup-title" style="text-align:center;">You're the Admin!</h2>
+      <p class="setup-sub" style="text-align:center;">Your account has full admin privileges. This page is now permanently locked.</p>
+      <div class="success-list">
+        <div class="sl-item"><i class="fas fa-check"></i> Approve or reject events from users</div>
+        <div class="sl-item"><i class="fas fa-check"></i> Users can share events via WhatsApp and Email</div>
+        <div class="sl-item"><i class="fas fa-check"></i> Users can get directions to any event</div>
+        <div class="sl-item"><i class="fas fa-check"></i> Promote other users to admin anytime</div>
+        <div class="sl-item"><i class="fas fa-check"></i> Setup page permanently disabled</div>
+      </div>
+      <a href="admin.html"><button class="btn-setup"><i class="fas fa-shield-alt"></i> Open Admin Panel</button></a>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+  const SETUP_KEY = "EVENTBEE_ADMIN_2024"; // CHANGE THIS BEFORE DEPLOYING
+
+  const show   = id => { document.querySelectorAll('.setup-screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
+  const setMsg = (id,msg,t) => { const e=document.getElementById(id); e.textContent=msg; e.className='msg '+t; };
+  const clrMsg = id => { document.getElementById(id).className='msg'; };
+
+  async function adminExists() {
+    try { const s=await db.collection('users').where('isAdmin','==',true).limit(1).get(); return !s.empty; }
+    catch(e) { return e.code==='permission-denied'; }
+  }
+
+  (async () => {
+    if (await adminExists()) { show('scr-blocked'); return; }
+    auth.onAuthStateChanged(user => {
+      if (user && !user.isAnonymous) {
+        document.getElementById('pillName').textContent  = user.displayName||'No name';
+        document.getElementById('pillEmail').textContent = user.email||'';
+        document.getElementById('pillPhoto').src = user.photoURL||'https://i.pravatar.cc/40?u='+user.uid;
+        show('scr-confirm');
+      } else { show('scr-auth'); }
+    });
+  })();
+
+  let isSignup = false;
+  document.getElementById('toggleAuthBtn').addEventListener('click',()=>{
+    isSignup=!isSignup;
+    document.getElementById('authBtn').innerHTML=isSignup?'<i class="fas fa-user-plus"></i> Create Account':'<i class="fas fa-sign-in-alt"></i> Login';
+    document.getElementById('toggleAuthBtn').textContent=isSignup?'Have account? Login instead':'No account? Sign up instead';
+    clrMsg('authMsg');
+  });
+  document.getElementById('authBtn').addEventListener('click',async()=>{
+    const email=document.getElementById('setupEmail').value.trim();
+    const pass=document.getElementById('setupPass').value;
+    if(!email||!pass){setMsg('authMsg','Please fill both fields.','error');return;}
+    const btn=document.getElementById('authBtn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Please wait…';
+    try {
+      if(isSignup){
+        const c=await auth.createUserWithEmailAndPassword(email,pass);
+        await db.collection('users').doc(c.user.uid).set({email,isAdmin:false,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+      } else { await auth.signInWithEmailAndPassword(email,pass); }
+    } catch(e) {
+      setMsg('authMsg',e.message,'error');
+      btn.disabled=false; btn.innerHTML=isSignup?'<i class="fas fa-user-plus"></i> Create Account':'<i class="fas fa-sign-in-alt"></i> Login';
+    }
+  });
+  document.getElementById('setupPass').addEventListener('keypress',e=>{if(e.key==='Enter')document.getElementById('authBtn').click();});
+  document.getElementById('googleSetupBtn').addEventListener('click',async()=>{
+    try {
+      const r=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+      const ref=db.collection('users').doc(r.user.uid);
+      if(!(await ref.get()).exists) await ref.set({email:r.user.email,name:r.user.displayName,isAdmin:false,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    } catch(e){setMsg('authMsg',e.message,'error');}
+  });
+  document.getElementById('backToAuthBtn').addEventListener('click',()=>{ auth.signOut(); clrMsg('keyMsg'); document.getElementById('keyInput').value=''; });
+  document.getElementById('activateBtn').addEventListener('click',async()=>{
+    const key=document.getElementById('keyInput').value.trim();
+    if(!key){setMsg('keyMsg','Please enter the setup key.','error');return;}
+    if(key!==SETUP_KEY){setMsg('keyMsg','Incorrect key. Please try again.','error');return;}
+    const user=auth.currentUser;
+    if(!user){setMsg('keyMsg','Session expired — refresh and try again.','error');return;}
+    const btn=document.getElementById('activateBtn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Activating…';
+    try {
+      if(await adminExists()){show('scr-blocked');return;}
+      await db.collection('users').doc(user.uid).set({email:user.email,name:user.displayName||null,isAdmin:true,createdAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      show('scr-success');
+    } catch(e) {
+      setMsg('keyMsg','Error: '+e.message,'error');
+      btn.disabled=false; btn.innerHTML='<i class="fas fa-crown"></i> Activate Admin Access';
+    }
+  });
+  document.getElementById('keyInput').addEventListener('keypress',e=>{if(e.key==='Enter')document.getElementById('activateBtn').click();});
+  </script>
+</body>
+</html>
